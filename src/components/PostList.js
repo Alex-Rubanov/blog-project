@@ -1,13 +1,21 @@
 import PostItem from "./PostItem";
+import PostsTitle from "./PostTitle";
 
-function PostList({ posts, title }) {
+function PostList({ posts, title, deletePost }) {
     return (
         <>
-            <h1 style={{textAlign: 'center'}}>
-                {title}
-            </h1>
+            {posts.length 
+                ? <PostsTitle title={title}/>
+                : <PostsTitle title="There are no available posts at the moment"/>
+            }
             {posts.map((post, index) => 
-                <PostItem post={post} key={post.id} number={index + 1} />
+                <PostItem 
+                    post={post} 
+                    id={post.id}
+                    key={post.id} 
+                    number={index + 1} 
+                    deletePost={deletePost}
+                />
             )}
         </>
     )

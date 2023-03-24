@@ -11,7 +11,7 @@ function PostItem(props) {
                 </div>
             </div>
             <div className="post__btns">
-                <MyButton>Delete</MyButton>
+                <MyButton onClick={() => props.deletePost(props.post.id)}>Delete</MyButton>
             </div>
         </div>
     )

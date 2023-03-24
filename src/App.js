@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import PostList from './components/PostList';
-import MyButton from './components/UI/button/MyButton';
-import MyInput from './components/UI/input/MyInput';
+import AddNewPost from './components/AddNewPost';
 import './styles/index.css'
 
 function App() {
@@ -12,33 +11,22 @@ function App() {
     {id: 4, title: 'Javascript 4', body: 'It is a programming language'}
   ]);
 
-  const [post, setPost] = useState({title: '', body: ''});
+  const addPost = (newPost) => {
+    setPosts([...posts, newPost]);
+  }
 
-  const addNewPost = (e) => {
-    e.preventDefault();
-
-    setPosts([...posts, {...post, id: Date.now()}]);
-    setPost({title: '', body: ''});
+  const deletePost = (id) => {
+    setPosts(posts.filter(post => post.id !== id));
   }
 
   return (
     <div className="App">
-      <form>
-        <MyInput
-          value={post.title} 
-          onChange={(e) => setPost({...post, title: e.target.value})}
-          type="text" 
-          placeholder='Enter title' 
-        />
-        <MyInput 
-          value={post.body}
-          onChange={(e) => setPost({...post, body: e.target.value})}
-          type="text" 
-          placeholder="Enter description"
-        />
-        <MyButton onClick={addNewPost}>Add post</MyButton>
-      </form>
-      <PostList posts={posts} title="List of JS posts"/>
+      <AddNewPost createPost={addPost}/>
+      <PostList 
+        posts={posts} 
+        title="List of JS posts"
+        deletePost={deletePost}
+      />
     </div>
   );
 }
