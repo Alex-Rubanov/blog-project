@@ -1,18 +1,17 @@
-// import '../styles/postItem.css'
-
+import MyButton from "./UI/button/MyButton";
 
 function PostItem(props) {
-    const { id, title, body } = props.post;
+
     return (
         <div className="post">
             <div className="post__content">
-                <strong>{id} {title}</strong>
+                <strong>{props.number}. {props.post.title}</strong>
                 <div>
-                    {body}
+                    {props.post.body}
                 </div>
             </div>
             <div className="post__btns">
-                <button>Delete</button>
+                <MyButton>Delete</MyButton>
             </div>
         </div>
     )
