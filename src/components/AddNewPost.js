@@ -24,7 +24,7 @@ const AddNewPost = ({ createPost }) => {
     }
 
     return (
-        <form>
+        <form style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
             <MyInput
             value={post.title} 
             onChange={(e) => setPost({...post, title: e.target.value})}

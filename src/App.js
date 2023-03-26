@@ -2,17 +2,20 @@ import { useState, useMemo } from 'react';
 import PostList from './components/PostList';
 import FilterPosts from './components/FilterPosts';
 import AddNewPost from './components/AddNewPost';
+import MyModal from './components/UI/myModal/MyModal';
 import './styles/index.css'
+import MyButton from './components/UI/button/MyButton';
 
 function App() {
   const [posts, setPosts] = useState([
-    {id: 1, title: 'aa', body: 'dd is a programming language'},
-    {id: 2, title: 'bb 2', body: 'cc is a programming language'},
+    {id: 1, title: 'rra', body: 'dd is a programming language'},
+    {id: 2, title: 'ee 2', body: 'cc is a programming language'},
     {id: 3, title: 'cc 3', body: 'bb is a programming language'},
     {id: 4, title: 'dd 4', body: 'aa is a programming language'}
   ]);
 
   const [filter, setFilter] = useState({sort: '', query: ''});
+  const [modal, setModal] = useState(false);
 
   const sortedPosts = useMemo(() => {
     console.log("RENDER");
@@ -31,6 +34,7 @@ function App() {
 
   const addPost = (newPost) => {
     setPosts([...posts, newPost]);
+    setModal(false);
   }
 
   const deletePost = (id) => {
@@ -39,7 +43,11 @@ function App() {
 
   return (
     <div className="App">
-      <AddNewPost createPost={addPost}/>
+      <MyButton onClick={() => setModal(true)}>Add a new post</MyButton>
+      <MyModal visible={modal} setVisible={setModal}>
+        <AddNewPost createPost={addPost}/>
+      </MyModal>
+      
       <hr style={{margin: '15px 0 15px 20px', width: '100%'}}/>
       <FilterPosts 
         filter={filter}
@@ -47,7 +55,7 @@ function App() {
       />
       <PostList 
         posts={sortedAndSearchedPosts} 
-        title="List of JS posts"
+        title="List of available posts"
         deletePost={deletePost}
       />
     </div>
