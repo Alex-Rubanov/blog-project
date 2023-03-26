@@ -2,7 +2,8 @@ import { useState ,useEffect } from 'react';
 import { usePosts } from './hooks/usePosts';
 import { SpinnerCircular } from 'spinners-react'
 
-import PostServices from './API/PostServices'
+import PostServices from './API/PostServices';
+import { useFetching } from './hooks/useFetching';
 import PostList from './components/PostList';
 import FilterPosts from './components/FilterPosts';
 import AddNewPost from './components/AddNewPost';
@@ -14,25 +15,18 @@ function App() {
   const [posts, setPosts] = useState([]);
   const [filter, setFilter] = useState({sort: '', query: ''});
   const [modal, setModal] = useState(false);
-  const [isPostLoading, setIsPostLoading] = useState(false);
 
   const searchedAndSortedPosts = usePosts(posts, filter.sort, filter.query);
+  const [fetchPosts, isLoading, postError] = useFetching(async () => {
+    const posts = await PostServices.getAll();
+    setPosts(posts);
+  });
 
   useEffect(() => {
     fetchPosts();
+    // eslint-disable-next-line
   }, [])
  
-  async function fetchPosts() {
-    setIsPostLoading(true);
-
-    const posts = await PostServices.getAll();
-    setPosts(posts);
-
-    setIsPostLoading(false);  
-  }
-  
-  
-
   const addPost = (newPost) => {
     setPosts([...posts, newPost]);
     setModal(false);
@@ -55,7 +49,8 @@ function App() {
         setFilter={setFilter}
       />
 
-      {isPostLoading
+      {postError && <h2 style={{textAlign: 'center', marginTop: '30px'}}>Ooops! Error occured during request {postError}</h2>}
+      {isLoading
         ? <SpinnerCircular 
             style={{ display: 'block', margin: '50px auto'}} 
             size={69} 
