@@ -1,4 +1,5 @@
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
+import { usePosts } from './hooks/usePosts';
 import PostList from './components/PostList';
 import FilterPosts from './components/FilterPosts';
 import AddNewPost from './components/AddNewPost';
@@ -16,21 +17,10 @@ function App() {
 
   const [filter, setFilter] = useState({sort: '', query: ''});
   const [modal, setModal] = useState(false);
+  const searchedAndSortedPosts = usePosts(posts, filter.sort, filter.query);
 
-  const sortedPosts = useMemo(() => {
-    console.log("RENDER");
-    if (filter.sort) {
-      return [...posts].sort((a, b) => a[filter.sort].localeCompare(b[filter.sort]));
-    }
 
-    return posts;
-  }, [filter.sort, posts]);
-
-  const sortedAndSearchedPosts = useMemo(() => {
-    const caseInsensitiveQuery = filter.query.toLowerCase();
-
-    return sortedPosts.filter(post => post.title.toLowerCase().includes(caseInsensitiveQuery));
-  }, [sortedPosts, filter.query])
+ 
 
   const addPost = (newPost) => {
     setPosts([...posts, newPost]);
@@ -54,7 +44,7 @@ function App() {
         setFilter={setFilter}
       />
       <PostList 
-        posts={sortedAndSearchedPosts} 
+        posts={searchedAndSortedPosts} 
         title="List of available posts"
         deletePost={deletePost}
       />
