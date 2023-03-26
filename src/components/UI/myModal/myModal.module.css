@@ -1,18 +1,18 @@
-.modal {
+.myModal {
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.5);
     display: none;
 }
 
-.modal__content {   
+.myModal__content {   
     background-color: #ddd;
-    min-width: 50vw;
+    min-width: 30vw;
     padding: 25px;
     border-radius: 5px;
 }
 
-.modal.active {
+.myModal.active {
     display: flex;
     justify-content: center;
     align-items: center;
