@@ -1,5 +1,8 @@
-import { useState } from 'react';
+import { useState ,useEffect } from 'react';
 import { usePosts } from './hooks/usePosts';
+import { SpinnerCircular } from 'spinners-react'
+
+import PostServices from './API/PostServices'
 import PostList from './components/PostList';
 import FilterPosts from './components/FilterPosts';
 import AddNewPost from './components/AddNewPost';
@@ -8,19 +11,27 @@ import './styles/index.css'
 import MyButton from './components/UI/button/MyButton';
 
 function App() {
-  const [posts, setPosts] = useState([
-    {id: 1, title: 'rra', body: 'dd is a programming language'},
-    {id: 2, title: 'ee 2', body: 'cc is a programming language'},
-    {id: 3, title: 'cc 3', body: 'bb is a programming language'},
-    {id: 4, title: 'dd 4', body: 'aa is a programming language'}
-  ]);
-
+  const [posts, setPosts] = useState([]);
   const [filter, setFilter] = useState({sort: '', query: ''});
   const [modal, setModal] = useState(false);
+  const [isPostLoading, setIsPostLoading] = useState(false);
+
   const searchedAndSortedPosts = usePosts(posts, filter.sort, filter.query);
 
-
+  useEffect(() => {
+    fetchPosts();
+  }, [])
  
+  async function fetchPosts() {
+    setIsPostLoading(true);
+
+    const posts = await PostServices.getAll();
+    setPosts(posts);
+
+    setIsPostLoading(false);  
+  }
+  
+  
 
   const addPost = (newPost) => {
     setPosts([...posts, newPost]);
@@ -43,11 +54,22 @@ function App() {
         filter={filter}
         setFilter={setFilter}
       />
-      <PostList 
-        posts={searchedAndSortedPosts} 
-        title="List of available posts"
-        deletePost={deletePost}
-      />
+
+      {isPostLoading
+        ? <SpinnerCircular 
+            style={{ display: 'block', margin: '50px auto'}} 
+            size={69} 
+            thickness={100} 
+            speed={100} 
+            color="teal" 
+            secondaryColor="rgba(0, 0, 0, 0.44)" 
+          />
+      : <PostList 
+          posts={searchedAndSortedPosts} 
+          title="List of available posts"
+          deletePost={deletePost}
+        />
+      }
     </div>
   );
 }
