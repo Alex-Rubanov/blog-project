@@ -4,6 +4,8 @@ import { SpinnerCircular } from 'spinners-react'
 
 import PostServices from './API/PostServices';
 import { useFetching } from './hooks/useFetching';
+import Pagination from './components/UI/pagination/Pagination';
+import { getTotalPages } from './utils/pages';
 import PostList from './components/PostList';
 import FilterPosts from './components/FilterPosts';
 import AddNewPost from './components/AddNewPost';
@@ -16,16 +18,28 @@ function App() {
   const [filter, setFilter] = useState({sort: '', query: ''});
   const [modal, setModal] = useState(false);
 
+  const [totalPages, setTotalPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(4);
+
+
+
   const searchedAndSortedPosts = usePosts(posts, filter.sort, filter.query);
   const [fetchPosts, isLoading, postError] = useFetching(async () => {
-    const posts = await PostServices.getAll();
-    setPosts(posts);
+    const limit = 10;
+
+    const response = await PostServices.getAll(limit, currentPage);
+    const totalPostsCount = response.headers['x-total-count'];
+    const totalNumberOfPages = getTotalPages(totalPostsCount, limit);
+
+    setTotalPages(totalNumberOfPages);
+    setPosts(response.data);
   });
 
   useEffect(() => {
     fetchPosts();
+    console.log('RENDER');
     // eslint-disable-next-line
-  }, [])
+  }, [currentPage])
  
   const addPost = (newPost) => {
     setPosts([...posts, newPost]);
@@ -49,7 +63,7 @@ function App() {
         setFilter={setFilter}
       />
 
-      {postError && <h2 style={{textAlign: 'center', marginTop: '30px'}}>Ooops! Error occured during request {postError}</h2>}
+      {postError && <h2 style={{textAlign: 'center', marginTop: '30px'}}>Ooops! Error occured during request. {postError}</h2>}
       {isLoading
         ? <SpinnerCircular 
             style={{ display: 'block', margin: '50px auto'}} 
@@ -65,6 +79,13 @@ function App() {
           deletePost={deletePost}
         />
       }
+
+      <Pagination
+        totalPages={totalPages}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        isLoading={isLoading}
+      />      
     </div>
   );
 }
