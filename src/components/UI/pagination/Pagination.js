@@ -1,10 +1,10 @@
-import usePagination from "../../../hooks/usePagination";
 import MyButton from "../button/MyButton";
+import { createArray } from "../../../utils/pages";
 import classes from './pagination.module.css';
 
 const Pagination = ({ totalPages, currentPage, setCurrentPage , isLoading}) => {
 
-    const pagesArray = usePagination(totalPages);
+    const pagesArray = createArray(totalPages);
 
     return (
             <div className={classes.page__wrapper}>
