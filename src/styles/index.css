@@ -8,7 +8,6 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
     padding-top: 50px;
 }
@@ -32,6 +31,8 @@
 }
 
 .post__btns >  button {
+    display: flex;
+    margin-bottom: 5px;
     padding: 10px;
     border-radius: 5px;
     cursor: pointer;
@@ -85,5 +86,14 @@
     justify-content: flex-end;
     font-size: 18px;
     background-color: #ddd;
+}
+
+.post__item {
+    display: flex;
+    flex-direction: column;
+    font-size: 16px;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
 }
 
