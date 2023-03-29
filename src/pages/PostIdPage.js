@@ -6,8 +6,8 @@ import { SpinnerCircular } from 'spinners-react';
 import MyButton from '../components/UI/button/MyButton';
 
 export default function PostIdPage() {
-  const params = useParams();
-  console.log(params.id)
+  const postID = useParams().id;
+
   const router = useHistory();
 
   const [post, setPost] = useState({});
@@ -24,12 +24,14 @@ export default function PostIdPage() {
   })
 
   useEffect(() => {
-    fetchPost(params.id);
-    fetchComments(params.id);
+    fetchPost(postID);
+    fetchComments(postID);
   }, [])
 
   return (
     <div className="post__item">
+      {postError || commentsError ? router.push('/404') : null}
+      
       {isLoading || commentsIsLoading
         ? <SpinnerCircular/>
         : <div>
