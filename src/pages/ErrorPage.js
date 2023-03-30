@@ -8,7 +8,6 @@ export default function ErrorPage() {
       <p>
         <i>Page was not found...</i>
       </p>
-      <Link to="/">Go back to main page</Link>
       <Link to="/posts">Go to posts</Link>
     </div>
   );
